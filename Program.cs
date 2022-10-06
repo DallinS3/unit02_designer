@@ -3,10 +3,10 @@
 Console.WriteLine("Hello, World!");
 */
 using Game;
-using System;
-using System.Collections.Generic;
+// using System;
+// using System.Collections.Generic;
 
-namespace Unit02
+namespace Unit02_Designer
 {
     /// <summary>
     /// The program's entry point.
