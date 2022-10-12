@@ -8,47 +8,24 @@ namespace Game
     /// </summary>
     public class Director
     {
-        List<Card> _card = new List<Card>();
+        // Access    // Data Type    // Name     =   // Value
+        public Card _currentCard = new Card();
+        public Card _nextCard = new Card();
+        // No need for list?
         bool _isPlaying = true;
-        int _score = 0;
-        int _totalScore = 0;
+        int _score = 300;
+        string guessCard = "";
 
         /// <summary>
         /// 
         /// </summary>
         public Director()
         {
-            for (int i = 0; i < 14; i++)
-            {
-                Card face = new Card();
-
-                if (i == 1)
-                {
-                    face = 'A';
-                }
-                else if (i == 11)
-                {
-                    face = 'J';
-                }
-                else if (i == 12)
-                {
-                    face = 'Q';
-                }
-                else if (i == 13)
-                {
-                    face = 'K';
-                }
-                else
-                {
-                    
-                }
-
-                _card.Add(face);
-            }
+            
         }
 
         /// <summary>
-        /// 
+        /// The user initiates the game by running the program and game continues until all points are lost (or max points are reached)
         /// </summary>
         public void StartGame()
         {
@@ -68,6 +45,15 @@ namespace Game
             Console.Write("Draw card? [y/n] ");
             string drawCard = Console.ReadLine();
             _isPlaying = (drawCard == "y");
+
+            if (_isPlaying)
+            {
+                Console.WriteLine($"Card Value: {_currentCard.trueCard}");
+
+                Console.WriteLine("Is the next card higher or lower (H/L) than the previous card?");
+                Console.Write("Please type (h/l): ");
+                guessCard = Console.ReadLine();
+            }
         }
 
         /// <summary>
@@ -79,14 +65,27 @@ namespace Game
             {
                 return;
             }
-
-            _score = 300;
-            foreach (Card face in _card)
+            else
             {
-                face.Draw();
-                _score += face.faceValue;
+                _nextCard = new Card();
+
+                if ((_currentCard.faceValue <= _nextCard.faceValue) && (guessCard == "h") ||
+                (_currentCard.faceValue >= _nextCard.faceValue) && (guessCard == "l"))
+                {
+                    _score += 100;
+                    // Console.WriteLine("You made it to a correct statement!");
+                }
+
+                else
+                {
+                    _score -= 75;
+                    // Console.WriteLine("You made it to an incorrect statement!");
+                }
+
+                _currentCard = _nextCard;
             }
-            _totalScore += _score;
+            // _score = 300;
+            
         }
 
         /// <summary>
@@ -99,17 +98,18 @@ namespace Game
                 return;
             }
 
-            string values = "";
-            foreach (Card face in _card)
+            else
             {
-                values += $"{face.faceValue} ";
+                Console.WriteLine($"\nNew Card Value: {_nextCard.trueCard}");
+
+                if (_score == 1000)
+                {
+                    Console.WriteLine("CONGRATULATIONS!! You have won the game!");
+                }
             }
 
-            Console.WriteLine($"You rolled: {values}");
-            Console.WriteLine($"Your score is: {_totalScore}\n");
-            _isPlaying = (_score > 0);
+            Console.WriteLine($"Your score is: {_score}\n");
+            _isPlaying = (_score > 0) || (_score >= 1000);
         }
     }
 }
-
-
